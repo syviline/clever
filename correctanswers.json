@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "correct": ["Москва", "Тюмень"]
+  },
+  {
+    "id": 2,
+    "correct": [
+      {
+        "id": 3,
+        "correct": "dolor"
+      },
+      {
+        "id": 4,
+        "correct": "amet"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "correct": "Лондон"
+  }
+]

@@ -1,0 +1,107 @@
+* {
+  font-family: 'Segoe UI', sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+    background: url("https://tailwindui.com/img/hero-pattern-lg.png");
+    background-repeat: repeat;
+    background-size: 800px auto;
+}
+
+.skew {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('/static/img/skew.svg');
+    background-size: 100% auto;
+    min-height: 100vh;
+    width: 65%;
+    min-width: 1000px;
+    max-width: 1100px;
+}
+
+.content {
+    margin-right: 200px;
+    width: 400px;
+}
+
+.form__label {
+    font-family: 'Ubuntu', sans-serif;
+    color: #67e8f9;
+    font-size: 40px;
+    font-weight: 500;
+    margin-left: -10px;
+}
+
+.content form .label {
+    color: white;
+    margin-top: 30px;
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+.content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.content form input {
+    margin-top: 10px;
+    font-size: 16px;
+    padding: 12px 15px;
+    background-color: #f5f5f5;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    color: black;
+    font-weight: 500;
+    box-shadow: inset 0 2px 2px hsla(0, 0%, 0%, 0.3);
+}
+
+.content form input:focus {
+    background-color: white;
+}
+
+.content form .submit {
+    width: 200px;
+    margin: 30px auto;
+    padding: 10px;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: white;
+    border-radius: 12px;
+    transition: 0.2s;
+    cursor: pointer;
+    box-shadow: none;
+}
+
+.content form .submit:hover {
+    background-color: #06b6d4;
+    color: white;
+    transition: 0.2s;
+}
+
+.registerlink__label {
+    color: white;
+    text-align: center;
+}
+
+.register__link {
+    color: #22d3ee;
+}
+
+@media(max-width: 1200px) {
+    .skew {
+        width: 100%;
+        min-width: 0px;
+        background: none;
+        background-color: #161e2e;
+    }
+
+    .content {
+        margin-right: 0;
+    }
+}
