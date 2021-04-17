@@ -1,0 +1,68 @@
+header {
+    min-height: 100px;
+    background-color: #fafaf9;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.variants {
+    display: flex;
+    justify-content: space-around;
+}
+
+.variants button {
+    padding: 30px;
+    font-size: 18px;
+    flex-basis: 25%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.1s;
+    border-radius: 10px;
+}
+
+.variants button:hover {
+    background-color: #cbd5e1;
+    transition: 0.1s;
+}
+
+.variants {
+    margin-top: 40px;
+}
+
+.editable {
+    border: 2px solid #1E293B;
+    border-radius: 10px;
+    line-height: 50px;
+    vertical-align: center;
+    min-width: 60px;
+    min-height: 50px;
+    outline: none;
+    padding: 0 20px;
+}
+
+button.answer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button .editable {
+    max-width: 80%;
+}
+
+.answer-add {
+    background-color: #e0f2fe;
+    border-color: #50c7fc;
+    color: #354867;
+}
+
+.answer-add .material-icons-round {
+    font-size: 50px;
+    padding-bottom: 0;
+}

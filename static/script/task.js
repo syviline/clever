@@ -22,9 +22,9 @@ function renderTask(task) {  // "Рендер задачи", чтобы пото
         case "multipleAnswer":
             for (let [index, item] of task.content.answers.entries()) {
                 if (answers[taskId].includes(item))
-                    taskText += `<div class=\"answer active\" id=\"answer${index}\" onclick=\"multipleAnswerChoose('answer${index}', '${taskId}')\">${item}</div>`
+                    taskText += `<button class=\"answer active\" id=\"answer${index}\" onclick=\"multipleAnswerChoose('answer${index}', '${taskId}')\">${item}</button>`
                 else
-                    taskText += `<div class=\"answer\" id=\"answer${index}\" onclick=\"multipleAnswerChoose('answer${index}', '${taskId}')\">${item}</div>`
+                    taskText += `<button class=\"answer\" id=\"answer${index}\" onclick=\"multipleAnswerChoose('answer${index}', '${taskId}')\">${item}</button>`
             }
             // task.content.answers.forEach(item => {
             //     if (answers[taskId].includes(item))
@@ -66,9 +66,9 @@ function renderTask(task) {  // "Рендер задачи", чтобы пото
         case "oneAnswer":
             for (let [index, item] of task.content.answers.entries()) {
                  if (answers[taskId] == item)
-                     taskText += `<div class="answer active" id="answer${index}" onclick="oneAnswerChoose('answer${index}', '${taskId}')">${item}</div>`
+                     taskText += `<button class="answer active" id="answer${index}" onclick="oneAnswerChoose('answer${index}', '${taskId}')">${item}</button>`
                  else
-                     taskText += `<div class="answer" id="answer${index}" onclick="oneAnswerChoose('answer${index}', '${taskId}')">${item}</div>`
+                     taskText += `<button class="answer" id="answer${index}" onclick="oneAnswerChoose('answer${index}', '${taskId}')">${item}</button>`
             }
             res = taskTemplates.oneAnswer.format(task.content.question, taskText)
             return res
@@ -116,7 +116,7 @@ let task = [
         "checkType": "auto",
         "content": {
             "question": "Города России",
-            "answers": ["Москва", "Лондон", "2"]
+            "answers": ["Москва", "Лондон", "2", "2", "2", "2", "2", "2", "2", "2"]
         }
     },
     {
@@ -202,5 +202,4 @@ backButton.addEventListener('click', e => {
     }
     content.innerHTML = renderTask(task[currentTaskId])
     info.innerText = `${currentTaskId + 1} из ${task.length}`
-
 })

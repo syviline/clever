@@ -31,5 +31,11 @@ def registerPage():
         return redirect('/')
     return render_template('register.html', form=form)
 
+
+@app.route('/panel/task/edit')
+def edit_task():
+    return render_template('taskedit.html')
+
+
 if __name__ == "__main__":
     app.run(debug=True)
