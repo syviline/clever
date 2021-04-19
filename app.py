@@ -1,9 +1,17 @@
 from flask import Flask, render_template, redirect
 from forms.loginform import LoginForm
 from forms.registerform import RegisterForm
+import db
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'qwekwqkJDHASIqwop'
+
+def db_f():
+    db.db_session.global_init("db/clever.db")
+    db_sess = db.db_session.create_session()
+    for user in db_sess.query(db.User).all():
+        print(user)
+    # db.main()
 
 @app.route('/')
 def index():
@@ -38,4 +46,5 @@ def edit_task():
 
 
 if __name__ == "__main__":
+    db_f()
     app.run(debug=True)
