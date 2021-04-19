@@ -10,6 +10,10 @@ header {
     align-items: center;
 }
 
+.answer {
+    transition: 0.3s;
+}
+
 .variants {
     display: flex;
     justify-content: space-around;
@@ -48,12 +52,34 @@ header {
 
 button.answer {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+}
+
+button.answer .editable {
+    flex-basis: 60%;
 }
 
 button .editable {
     max-width: 80%;
+}
+
+.answer .delete__button {
+    flex-basis: 20%;
+    transition: 0.1s;
+}
+
+.answer .delete__button .material-icons-round {
+    font-size: 30px;
+}
+
+.answer .empty {
+    flex-basis: 20%;
+}
+
+.answer .delete__button:hover {
+    color: #f43f5e;
+    transition: 0.1s;
 }
 
 .answer-add {

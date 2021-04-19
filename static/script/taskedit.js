@@ -1,4 +1,4 @@
-String.prototype.format = function () {
+String.prototype.format = function () { // форматирует строку. "dsf {0} fds".format('asd') = "dsf asd fds"
     var args = arguments;
     return this.replace(/{(\d+)}/g, function (match, number) {
         return typeof args[number] != 'undefined'
@@ -8,7 +8,7 @@ String.prototype.format = function () {
     });
 };
 
-function numToId(num) {
+function numToId(num) { // превращает число в буквенный id
     let res = ''
     let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
     num = num.toString()
@@ -18,7 +18,7 @@ function numToId(num) {
     return res
 }
 
-function idToNum(id) {
+function idToNum(id) { // превращает буквенный id в число
     let res = ''
     let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
     for (let i = 0; i < id.length; i++) {
@@ -27,7 +27,7 @@ function idToNum(id) {
     return parseInt(res)
 }
 
-function generateUniqueId() {
+function generateUniqueId() { // генерирует уникальный id по текущему времени
     d = Date.now()
     r = Math.floor(Math.random() * 10000)
     return numToId(d * r)
@@ -52,40 +52,40 @@ function generateUniqueId() {
     })
 }*/
 
-if (task.length == 0) {
+if (task.length == 0) { // при запуске: если ничего нет в task, то делаем task = [{}]
     task = [{}]
 }
 
-let taskTemplates = {
+let taskTemplates = { // шаблоны для заданий
     textWithGaps: "<h1 class=\"task__label\">Вставьте пропуски</h1><div class=\"task__text\">{1}</div>",
-    multipleAnswer: "<div class=\"question\"><div class=\"question__content\">{0}</div></div><h3 style=\"font-weight: 500; margin-top: 20px; margin-left: 20px;\">Выберите несколько ответов</h3><div class=\"answers__container\">{1}</div>",
-    oneAnswer: "<div class=\"question\"><div class=\"question__content\">{0}</div></div><h3 style=\"font-weight: 500; margin-top: 20px; margin-left: 20px;\">Выберите один из ответов</h3><div class=\"answers__container\">{1}</div>",
-    chooseTemplate: "<h2 class=\"textcenter\">Выберите шаблон для задания</h2><div class=\"variants\"><button onclick='chooseTemplate(1)'>Вопрос и выбор из нескольких ответов</button><button onclick='chooseTemplate(2)'>Вопрос и выбор из одного ответа</button><button onclick='chooseTemplate(3)'>Текстовое поле с пропусками</button></div>"
+    multipleAnswer: "<div class=\"question\"><div class=\"question__content\" id=\"question\"><div class=\"editable\" contenteditable=\"true\" oninput='editQuestion()'>{0}</div></div></div><h3 style=\"font-weight: 500; margin-top: 20px; margin-left: 20px;\">Выберите несколько ответов</h3><div class=\"answers__container\">{1}</div>",
+    oneAnswer: "<div class=\"question\"><div class=\"question__content\" id=\"question\"><div class='editable' contenteditable='true' oninput='editQuestion()'>{0}</div></div></div><h3 style=\"font-weight: 500; margin-top: 20px; margin-left: 20px;\">Выберите один из ответов</h3><div class=\"answers__container\">{1}</div>",
+    chooseTemplate: "<h2 class=\"textcenter\">Выберите шаблон для задания</h2><div class=\"variants\"><button onclick='chooseTemplate(1)'>Вопрос и выбор из нескольких ответов</button><button onclick='chooseTemplate(2)'>Текстовое поле с пропусками</button><button onclick='chooseTemplate(3)'>Вопрос и выбор из одного ответа</button></div>"
 
 }
 
 function renderTask(task) {  // "Рендер задачи", чтобы потом вставить в DOM, используется при клике на стрелочку вперед или назад
     console.log(task)
-    console.log(correctAnswers)
-    let taskText = ""
-    let taskId = task.id
-    let res
-    if (Object.keys(task).length == 0) {
+    console.log(correctAnswersIds)
+    let taskText = "" // html код внутренностей задания
+    let taskId = task.id // id задачи
+    let res // результат
+    if (Object.keys(task).length == 0) { // если задание пустое( {} ), то возвращаем шаблон выбора шаблона
         return taskTemplates.chooseTemplate
     }
-    switch (task.taskType) {
-        case "multipleAnswer":
+    switch (task.taskType) { // обработчики шаблонов
+        case "multipleAnswer": // вопрос и несколько ответов
             for (let [index, item] of task.content.answers.entries()) {
-                if (correctAnswers[taskId].includes(item))
-                    taskText += `<button class=\"answer active\" id=\"answer${index}\" onclick=\"multipleAnswerChoose('answer${index}', '${taskId}')\"><div class="editable" contenteditable="true">${item}</div></button>`
+                if (correctAnswersIds[taskId].includes(index))
+                    taskText += `<button class=\"answer active\" id=\"answer${index}\" oncontextmenu=\"multipleAnswerChoose('answer${index}', '${taskId}')\"><div class="empty"></div><div class="editable" contenteditable="true" oninput="editAnswer('answer${index}')">${item}</div><div class="delete__button" onclick="deleteVariant(${index})"><span class="material-icons-round">delete</span></div></button>`
                 else
-                    taskText += `<button class=\"answer\" id=\"answer${index}\" onclick=\"multipleAnswerChoose('answer${index}', '${taskId}')\"><div class="editable" contenteditable="true">${item}</div></button>`
+                    taskText += `<button class=\"answer\" id=\"answer${index}\" oncontextmenu=\"multipleAnswerChoose('answer${index}', '${taskId}')\"><div class="empty"></div><div class="editable" contenteditable="true" oninput="editAnswer('answer${index}')">${item}</div><div class="delete__button" onclick="deleteVariant(${index})"><span class="material-icons-round">delete</span></div></button>`
             }
             taskText += `<button class=\"answer answer-add\" onclick=\"addAnswer()\"><span class="material-icons-round">add_circle_outline</span></button>`
-            res = taskTemplates.multipleAnswer.format(`<div class="editable" contenteditable="true">${task.content.question}</div>`, taskText)
+            res = taskTemplates.multipleAnswer.format(task.content.question, taskText)
             return res
             break;
-        case "textWithGaps":
+        case "textWithGaps": // текст с пропусками
             task.content.forEach(item => {
                 if (typeof(item) == "string") {
                     taskText += item
@@ -113,7 +113,7 @@ function renderTask(task) {  // "Рендер задачи", чтобы пото
             return res
             console.log(2)
             break;
-        case "oneAnswer":
+        case "oneAnswer": // вопрос и один ответ
             for (let [index, item] of task.content.answers.entries()) {
                  if (correctAnswers[taskId] == item)
                      taskText += `<div class="answer active" id="answer${index}" onclick="oneAnswerChoose('answer${index}', '${taskId}')">${item}</div>`
@@ -126,56 +126,108 @@ function renderTask(task) {  // "Рендер задачи", чтобы пото
     }
 }
 
-function chooseTemplate(id) {
-    task[currentTaskId].id = generateUniqueId()
+function renderTaskDOM() { // "рендер" задачи в DOM
+    content.innerHTML = renderTask(task[currentTaskId])
+}
+
+function deleteVariant(index) { // Удаление варианта ответа
+    task[currentTaskId].content.answers.splice(index, 1)
+    let taskId = task[currentTaskId].id
+    let indexOfAnswer = correctAnswersIds[taskId].indexOf(index)
+    if (indexOfAnswer != -1)
+        correctAnswersIds[taskId].splice(correctAnswersIds[taskId].indexOf(index), 1)
+    for (i = 0; i <= correctAnswersIds[taskId].length; i++) {
+        console.log(correctAnswersIds[taskId][i])
+        if (correctAnswersIds[taskId][i] > index) {
+            correctAnswersIds[taskId][i] -= 1
+        }
+    }
+    renderTaskDOM()
+}
+
+function editQuestion() { // Изменение вопроса
+    let newQuestion = document.querySelector('#question').innerText
+    task[currentTaskId].content.question = newQuestion
+}
+
+function editAnswer(id) { // Изменение варианта ответа
+    let newans = document.querySelector(`#${id} .editable`).innerText
+    let ansId = parseInt(id.replace('answer', ''))
+    task[currentTaskId].content.answers[ansId] = newans
+}
+
+function multipleAnswerChoose(id, taskId) {
+    e = window.event
+    e.preventDefault()
+    let elemId = parseInt(id.replace('answer', ''))
+    // let elem = document.querySelector(`#${id}`)
+    // if(elem.innerText in correctAnswers[taskId]) {
+    //     correctAnswers[taskId].slice(correctAnswers[taskId].indexOf(elem.innerText))
+    // } else {
+    //     correctAnswers[taskId].push(elem.innerText)
+    // }
+    if (correctAnswersIds[taskId].includes(elemId)) {
+        correctAnswersIds[taskId].splice(correctAnswersIds[taskId].indexOf(elemId), 1)
+    } else {
+        correctAnswersIds[taskId].push(elemId)
+    }
+    renderTaskDOM()
+}
+
+function chooseTemplate(id) { // выбор шаблона при создании нового задания
+    uid = generateUniqueId()
+    task[currentTaskId].id = uid
     if (id == 1) {
         task[currentTaskId].taskType = 'multipleAnswer'
         task[currentTaskId].content = {question: "", answers: []}
+        correctAnswersIds[uid] = []
     } else if (id == 2) {
         task[currentTaskId].taskType = 'textWithGaps'
         task[currentTaskId].content = []
+        correctAnswersIds[uid] = {}
     } else if (id == 3) {
         task[currentTaskId].taskType = 'oneAnswer'
         task[currentTaskId].content = {question: "", answers: []}
+        correctAnswersIds[uid] = ''
     }
-    content.innerHTML = renderTask(task[currentTaskId])
+    renderTaskDOM()
 }
 
-function addAnswer() {
+function addAnswer() { // добавление ответа в задание
     task[currentTaskId].content.answers.push("")
-    content.innerHTML = renderTask(task[currentTaskId])
+    renderTaskDOM()
 }
 
-let currentTaskId = 0
-let forwardButton = document.querySelector(".forward")
+let currentTaskId = 0 // id текущей задачи в массиве task
+let forwardButton = document.querySelector(".forward") // кнопочки
 let backButton = document.querySelector(".back")
 let forwardIcon = forwardButton.querySelector('.material-icons-round')
 let info = document.querySelector(".info")
 
-info.innerText = `${currentTaskId + 1} из ${task.length}`
+info.innerText = `${currentTaskId + 1} из ${task.length}` // информация о текущем задании снизу(1 из 3 и т.д.)
 
 let content = document.querySelector(".content .container")
-content.innerHTML = renderTask(task[currentTaskId])
+renderTaskDOM()
 
-if (currentTaskId + 1 == task.length) {
+if (currentTaskId + 1 == task.length) { // если текущее задание последнее, то на кнопке вперед будет знак плюса
     forwardIcon.innerText = 'add'
 }
 
-forwardButton.addEventListener('click', e => {
+forwardButton.addEventListener('click', e => { // при нажатии на кнопку вперед
     e.preventDefault()
-    if (currentTaskId + 1 == task.length) {
+    if (currentTaskId + 1 == task.length) { // если текущее задание последнее, то создаем новое
         task.push({})
     }
     currentTaskId++
-    info.innerText = `${currentTaskId + 1} из ${task.length}`
-    if (currentTaskId + 1 == task.length) {
+    info.innerText = `${currentTaskId + 1} из ${task.length}` // обновляем info
+    if (currentTaskId + 1 == task.length) { // если текущее задание последнее, то на кнопке вперед будет знак плюса
         forwardIcon.innerText = 'add'
     }
-    backButton.classList.remove('inactive')
-    content.innerHTML = renderTask(task[currentTaskId])
+    backButton.classList.remove('inactive') // делаем кнопку назад активной(если она была неактивной)
+    renderTaskDOM() // "рендерим" контент задачи
 })
 
-backButton.addEventListener('click', e => {
+backButton.addEventListener('click', e => { // кнопка назад
     e.preventDefault()
     if (currentTaskId < 1) {
         return
@@ -186,5 +238,5 @@ backButton.addEventListener('click', e => {
     }
     forwardIcon.innerText = 'arrow_forward'
     info.innerText = `${currentTaskId + 1} из ${task.length}`
-    content.innerHTML = renderTask(task[currentTaskId])
+    renderTaskDOM()
 })
