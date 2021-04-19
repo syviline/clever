@@ -180,6 +180,7 @@ footer button.inactive {
 
 .answer.active {
   background-color: #4cf189;
+  border-color: #0d9b76;
   color: #064e3b;
 }
 

@@ -92,3 +92,78 @@ button .editable {
     font-size: 50px;
     padding-bottom: 0;
 }
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+}
+
+.task__score {
+    font-size: 18px;
+}
+
+.task__score input {
+    width: 40px;
+    padding: 5px;
+    font-size: 18px;
+    outline: none;
+    border: 1px solid #4ade80;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.empty {
+    flex-basis: 20%;
+}
+
+.task__name {
+    font-size: 28px;
+}
+
+.buttons button .material-icons-round {
+    margin-right: 5px;
+}
+
+.buttons button {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    padding: 20px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttons {
+    display: flex;
+}
+
+header {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.delete__task {
+    background-color: #f43f5e;
+    transition: 0.1s;
+}
+
+.delete__task:hover {
+    background-color: #cf3650;
+    transition: 0.1s;
+}
+
+.save {
+    background-color: #4ade80;
+    transition: 0.1s;
+}
+
+.save:hover {
+    background-color: #42c371;
+    transition: 0.1s;
+}
+
+.task__score {
+    margin-left: 40px;
+}

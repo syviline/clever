@@ -57,7 +57,7 @@ if (task.length == 0) { // при запуске: если ничего нет �
 }
 
 let taskTemplates = { // шаблоны для заданий
-    textWithGaps: "<h1 class=\"task__label\">Вставьте пропуски</h1><div class=\"task__text\">{1}</div>",
+    textWithGaps: "<h1 class=\"task__label\">Вставьте пропуски</h1><div class=\"task__text editable\" contenteditable='true' oninput='textWithGapsInput()'></div>",
     multipleAnswer: "<div class=\"question\"><div class=\"question__content\" id=\"question\"><div class=\"editable\" contenteditable=\"true\" oninput='editQuestion()'>{0}</div></div></div><h3 style=\"font-weight: 500; margin-top: 20px; margin-left: 20px;\">Выберите несколько ответов</h3><div class=\"answers__container\">{1}</div>",
     oneAnswer: "<div class=\"question\"><div class=\"question__content\" id=\"question\"><div class='editable' contenteditable='true' oninput='editQuestion()'>{0}</div></div></div><h3 style=\"font-weight: 500; margin-top: 20px; margin-left: 20px;\">Выберите один из ответов</h3><div class=\"answers__container\">{1}</div>",
     chooseTemplate: "<h2 class=\"textcenter\">Выберите шаблон для задания</h2><div class=\"variants\"><button onclick='chooseTemplate(1)'>Вопрос и выбор из нескольких ответов</button><button onclick='chooseTemplate(2)'>Текстовое поле с пропусками</button><button onclick='chooseTemplate(3)'>Вопрос и выбор из одного ответа</button></div>"
@@ -86,51 +86,34 @@ function renderTask(task) {  // "Рендер задачи", чтобы пото
             return res
             break;
         case "textWithGaps": // текст с пропусками
-            task.content.forEach(item => {
-                if (typeof(item) == "string") {
-                    taskText += item
-                } else if(typeof(item) == "object") {
-                    if ("content" in item) {
-                        taskText += ` <select id='${item.id}' onchange="saveResult('${item.id}', '${taskId}')" value=''><option value="" selected disabled hidden></option>`
-                        let alreadyAnswered = correctAnswers[taskId][item.id]
-                        item.content.forEach(it => {
-                            if (it == alreadyAnswered)
-                                taskText += `<option value="${it}" selected>${it}</option>`
-                            else
-                                taskText += `<option value="${it}">${it}</option>`
-                        })
-                        taskText += '</select> '
-                    } else {
-                        let alreadyAnswered = correctAnswers[taskId][item.id]
-                        if (alreadyAnswered != "")
-                            taskText += ` <input class='task__input' id='${item.id}' oninput="saveResult('${item.id}', '${taskId}')" value='${alreadyAnswered}'> `
-                        else
-                            taskText += ` <input class='task__input' id='${item.id}' oninput="saveResult('${item.id}', '${taskId}')"> `
-                    }
-                }
-            })
-            res = taskTemplates.textWithGaps.format(task.header, taskText)
-            return res
-            console.log(2)
+            return taskTemplates.textWithGaps
             break;
         case "oneAnswer": // вопрос и один ответ
             for (let [index, item] of task.content.answers.entries()) {
-                 if (correctAnswers[taskId] == item)
-                     taskText += `<div class="answer active" id="answer${index}" onclick="oneAnswerChoose('answer${index}', '${taskId}')">${item}</div>`
+                 if (correctAnswersIds[taskId] == index && correctAnswersIds[taskId] !== '')
+                     taskText += `<button class="answer active" id="answer${index}" oncontextmenu="oneAnswerChoose('answer${index}', '${taskId}')"><div class="empty"></div><div class="editable" contenteditable="true" oninput="editAnswer('answer${index}')">${item}</div><div class="delete__button" onclick="deleteVariantOneAnswer(${index})"><span class="material-icons-round">delete</span></div></button>`
                  else
-                     taskText += `<div class="answer" id="answer${index}" onclick="oneAnswerChoose('answer${index}', '${taskId}')">${item}</div>`
+                     taskText += `<button class="answer" id="answer${index}" oncontextmenu="oneAnswerChoose('answer${index}', '${taskId}')"><div class="empty"></div><div class="editable" contenteditable="true" oninput="editAnswer('answer${index}')">${item}</div><div class="delete__button" onclick="deleteVariantOneAnswer(${index})"><span class="material-icons-round">delete</span></div></button>`
             }
+            taskText += `<button class=\"answer answer-add\" onclick=\"addAnswer()\"><span class="material-icons-round">add_circle_outline</span></button>`
             res = taskTemplates.oneAnswer.format(task.content.question, taskText)
             return res
             break;
     }
 }
 
-function renderTaskDOM() { // "рендер" задачи в DOM
-    content.innerHTML = renderTask(task[currentTaskId])
+function textWithGapsInput() {
+    task[currentTaskId].content = document.querySelector('.editable').innerText
 }
 
-function deleteVariant(index) { // Удаление варианта ответа
+function renderTaskDOM() { // "рендер" задачи в DOM
+    content.innerHTML = renderTask(task[currentTaskId])
+    if (task[currentTaskId].taskType == 'textWithGaps') {
+        document.querySelector('.editable').innerText = task[currentTaskId].content
+    }
+}
+
+function deleteVariant(index) { // Удаление варианта ответа в multipleAnswer
     task[currentTaskId].content.answers.splice(index, 1)
     let taskId = task[currentTaskId].id
     let indexOfAnswer = correctAnswersIds[taskId].indexOf(index)
@@ -145,6 +128,17 @@ function deleteVariant(index) { // Удаление варианта ответ�
     renderTaskDOM()
 }
 
+function deleteVariantOneAnswer(index) { // Удаление варианта ответа в oneAnswer
+    task[currentTaskId].content.answers.splice(index, 1)
+    let taskId = task[currentTaskId].id
+    if (correctAnswersIds[taskId] == index) {
+        correctAnswersIds[taskId] = null
+    } else if (correctAnswersIds[taskId] > index) {
+        correctAnswersIds[taskId] -= 1
+    }
+    renderTaskDOM()
+}
+
 function editQuestion() { // Изменение вопроса
     let newQuestion = document.querySelector('#question').innerText
     task[currentTaskId].content.question = newQuestion
@@ -154,6 +148,14 @@ function editAnswer(id) { // Изменение варианта ответа
     let newans = document.querySelector(`#${id} .editable`).innerText
     let ansId = parseInt(id.replace('answer', ''))
     task[currentTaskId].content.answers[ansId] = newans
+}
+
+function oneAnswerChoose(id, taskId) {
+    e = window.event
+    e.preventDefault()
+    id = parseInt(id.replace('answer', ''))
+    correctAnswersIds[taskId] = id
+    renderTaskDOM()
 }
 
 function multipleAnswerChoose(id, taskId) {
@@ -183,12 +185,12 @@ function chooseTemplate(id) { // выбор шаблона при создани
         correctAnswersIds[uid] = []
     } else if (id == 2) {
         task[currentTaskId].taskType = 'textWithGaps'
-        task[currentTaskId].content = []
+        task[currentTaskId].content = ''
         correctAnswersIds[uid] = {}
     } else if (id == 3) {
         task[currentTaskId].taskType = 'oneAnswer'
         task[currentTaskId].content = {question: "", answers: []}
-        correctAnswersIds[uid] = ''
+        correctAnswersIds[uid] = null
     }
     renderTaskDOM()
 }
