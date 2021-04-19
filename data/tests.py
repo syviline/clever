@@ -29,7 +29,7 @@ class Test(SqlAlchemyBase):
                            backref="tests")
     # kto prohodil test
     users = orm.relation("User",
-                         secondary="class_to_test",
+                         secondary="user_to_test",
                          backref="tests")
 
     def __repr__(self):
@@ -48,8 +48,8 @@ class_to_test = sqlalchemy.Table(
 user_to_test = sqlalchemy.Table(
     'user_to_test',
     SqlAlchemyBase.metadata,
-    sqlalchemy.Column('test', sqlalchemy.Integer,
+    sqlalchemy.Column('tests', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('tests.id')),
-    sqlalchemy.Column('user', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('user.id'))
+    sqlalchemy.Column('users', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('users.id'))
 )

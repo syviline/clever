@@ -71,7 +71,7 @@ def db_ex(commit=True):
     user1 = add_user(db_sess, email="ivan@mail.ru", hashed_password="qwertyuiop[-=0", name="Ivan", surname="Ivanov")
     user2 = add_user(db_sess, email="ivan2@mail.ru", hashed_password="sdffesdfa1342", name="Ivan2", surname="Ivanov2")
     user3 = add_user(db_sess, email="ivan3@mail.ru", hashed_password="gffjy0--=372d", name="Ivan3", surname="Ivanov3")
-    print("addUser", out)
+    print("addUser",)
     #
     print("===")
     user = db_sess.query(User).first()
