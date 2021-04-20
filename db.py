@@ -22,7 +22,7 @@ def add_user(db_sess, **qwargs) -> User:
     user.name = qwargs.get("name")
     user.surname = qwargs.get("surname")
     user.email = email
-    user.hashed_password = qwargs.get("hashed_password")
+    user.set_password(qwargs.get('password'))
     user.status = qwargs.get("status")
 
     db_sess.add(user)

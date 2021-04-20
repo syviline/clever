@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style/landing.css') }}">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style/landing.css') }}">
 </head>
 <body>
   <header>
@@ -21,8 +21,8 @@
         </div>
       </div>
       <div class="right__block">
-        <a href="#" class="login_btn">Войти</a>
-        <a href="#" class="register_btn">Зарегистрироваться</a>
+        <a href="auth" class="login_btn">Войти</a>
+        <a href="register" class="register_btn">Зарегистрироваться</a>
       </div>
     </div>
   </header>

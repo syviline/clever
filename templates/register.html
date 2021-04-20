@@ -11,6 +11,64 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style/register.css') }}">
 </head>
 <body>
-
+<form action="register" method="post">
+    <h2>Регистрация</h2>
+    {{ form.hidden_tag() }}
+    <div class="names">
+        <div class="form-group">
+            <div>{{ form.firstname.label }}</div>
+            {{ form.firstname }}
+            <div class="error">
+                {% for error in form.firstname.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group">
+            <div>{{ form.lastname.label }}</div>
+            {{ form.lastname }}
+            <div class="error">
+                {% for error in form.lastname.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>{{ form.email.label }}</div>
+        {{ form.email }}
+        <div class="error">
+            {% for error in form.email.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="form-group">
+        <div>{{ form.password.label }}</div>
+        {{ form.password }}
+        <div class="error">
+            {% for error in form.password.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="form-group">
+        <div>{{ form.passwordRepeat.label }}</div>
+        {{ form.passwordRepeat }}
+        <div class="error">
+            {% for error in form.passwordRepeat.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="error">{{ message }}</div>
+    <div class="isteacher">
+        <input type="checkbox" value="true" id="isteacher" name="isteacher"><label for="isteacher"> Зарегистрироваться как учитель</label>
+    </div>
+    {{ form.submit }}
+</form>
+<div class="auth__cont">
+    <span class="auth__link">Вы тут не впервые? <a href="auth">Авторизуйтесь</a></span>
+</div>
 </body>
 </html>
