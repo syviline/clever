@@ -1,0 +1,23 @@
+{% extends "panelbase.html" %}
+{% block content %}
+<div class="content__head">
+    <h1>Ответы для ученика {{ user.name }} {{ user.surname }} в классе {{ class_.name }}</h1>
+</div>
+{% if not tests %}
+Этот ученик еще не прошел ни одного теста!
+{% else %}
+{% for i in tests %}
+<div class="class" style="display: flex; justify-content: space-between;">
+    <h3>{{ i.test.title }}</h3>
+    <span>{{ i.score }} / {{ i.maxscore }} (
+    {% if i.completed %}
+        <span style="color: green">ученик завершил тест</span>
+    {% else %}
+        <span style="color: red">ученик не завершил тест</span>
+    {% endif %}
+    )</span>
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

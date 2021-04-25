@@ -11,7 +11,7 @@ class Test(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    task = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
+    task = sqlalchemy.Column(sqlalchemy.Text, nullable=True)  # само задание в формате json
 
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
@@ -19,14 +19,15 @@ class Test(SqlAlchemyBase):
 
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
+
+    answers = sqlalchemy.Column(sqlalchemy.Text)  # ответы на тест в формате json
+    scores = sqlalchemy.Column(sqlalchemy.Text)  # значения баллов за каждое задание, json
+    is_completable = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
+
     # sozdatetel
     user = orm.relation('User')
 
     # classes = orm.relation("RelationsTest", back_populates='test')
-    # klassi u kotorih etot test
-    classes = orm.relation("Class",
-                           secondary="class_to_test",
-                           backref="tests")
     # kto prohodil test
     users = orm.relation("User",
                          secondary="user_to_test",
@@ -36,20 +37,11 @@ class Test(SqlAlchemyBase):
         return f"<Test> {self.title}, {self.created_date}, {self.user}"
 
 
-class_to_test = sqlalchemy.Table(
-    'class_to_test',
-    SqlAlchemyBase.metadata,
-    sqlalchemy.Column('test', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('tests.id')),
-    sqlalchemy.Column('class', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('classes.id'))
-)
-
 user_to_test = sqlalchemy.Table(
     'user_to_test',
     SqlAlchemyBase.metadata,
-    sqlalchemy.Column('tests', sqlalchemy.Integer,
+    sqlalchemy.Column('testid', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('tests.id')),
-    sqlalchemy.Column('users', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('users.id'))
+    sqlalchemy.Column('userid', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('users.id')),
 )

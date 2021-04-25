@@ -17,11 +17,11 @@
 <header>
     <div class="container">
         <div class="task__name">Задание 1</div>
-        <div class="task__score">Количество баллов: <input type="number" min="1" value="1"></div>
+        <div class="task__score">Количество баллов: <input type="number" min="1" value="1" class="score__value" oninput="changeScore()"></div>
         <div class="empty"></div>
         <div class="buttons">
-            <button class="delete__task"><span class="material-icons-round">delete</span><span class="button__text">Удалить страницу</span></button>
-            <button class="save"><span class="material-icons-round">save</span><span class="button__text">Сохранить</span></button>
+            <button class="delete__task" onclick="deleteTask()"><span class="material-icons-round">delete</span><span class="button__text">Удалить страницу</span></button>
+            <button class="save" onclick="save(true)"><span class="material-icons-round">save</span><span class="button__text">Сохранить</span></button>
         </div>
     </div>
 </header>
@@ -48,20 +48,10 @@
         00:30
         </span>
     </div>
-    <script>let task = [
-    // {
-    //     "id": 'a',
-    //     "taskType": "multipleAnswer",
-    //     "checkType": "auto",
-    //     "content": {
-    //         "question": "",
-    //         "answers": []
-    //     }
-    // },
-]
-    let correctAnswersIds = {
-
-    }
+    <script>let task = {{ task|tojson }}
+    let correctAnswersIds = {{ correctAnswersIds|tojson }}
+    let scores = {{ scores|tojson }}
+    let testid = {{ testid }}
     </script>
     <script src="{{ url_for('static', filename='script/taskedit.js') }}"></script>
 </footer>

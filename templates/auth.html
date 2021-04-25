@@ -18,13 +18,17 @@
             <div class="form__label">Авторизация</div>
             <form action="auth" method="POST" novalidate>
                 <div>{{ form.csrf_token }}</div>
-                <div class="label">{{ form.username.label() }}</div>
-                {{ form.username() }}
-                {% for error in form.username.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
+                <div class="label">{{ form.email.label() }}</div>
+                {{ form.email() }}
+                {% for error in form.email.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
                 <div class="label">{{ form.password.label() }}</div>
                 {{ form.password() }}
+                {% for error in form.password.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+                <div class="error">{{ message }}</div>
                 {{ form.submit(class='submit') }}
             </form>
             <div class="registerlink__label">Вы тут впервые? <a href="/register" class="register__link">Зарегистрируйтесь</a></div>

@@ -1,0 +1,33 @@
+.content__head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content__head button {
+    padding: 0 20px;
+    background-color: #0ea5e9;
+    border: none;
+    border-radius: 5px;
+}
+
+.content__head a {
+    color: #FFF;
+}
+
+form input {
+    padding: 5px;
+    outline: none;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
+form #submit:hover {
+    background-color: #94a3b8;
+    cursor: pointer;
+}
+
+.class {
+    font-size: 24px;
+    padding: 10px 0;
+    border-bottom: 1px solid black;
+}

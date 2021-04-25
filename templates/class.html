@@ -1,0 +1,32 @@
+{% extends "panelbase.html" %}
+
+{% block content %}
+<div class="content__head">
+    <h1>{{ title }}</h1>
+</div>
+<div>
+    <span>Ссылка для приглашения в класс:</span>
+    <input type="text" readonly value="127.0.0.1:5000/invitation/{{ invitation_link }}" onclick="this.select();">
+</div>
+<h2>Ученики:</h2>
+{% for i in schoolars %}
+<div class="class">
+    <a href="{{ classid }}/schoolar/{{ i.id }}">{{ i.name }} {{ i.surname }}</a>
+</div>
+{% endfor %}
+{% if tests%}
+<h1>Открыть тест для класса:</h1>
+{% endif %}
+{% for i in tests %}
+<div class="class">
+    <a href="/opentest/{{ i.id }}/{{ classid }}">{{ i.title }}</a>
+</div>
+{% endfor %}
+<h1>Открытые тесты:</h1>
+{% for i in opentests %}
+<div class="class" style="display: flex; justify-content: space-between">
+    <span>{{ i.title }}</span>
+    <a href="/closetest/{{ i.id }}/{{ classid }}" style="color: red;">Удалить тест</a>
+</div>
+{% endfor %}
+{% endblock %}

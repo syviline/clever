@@ -36,6 +36,12 @@
       </span>
     </div>
   </footer>
+  <script>
+    let testid = {{ testid }}
+    let classid = {{ classid }}
+    let answers = {{ useranswers|tojson }}
+    let task = {{ task|tojson }}
+  </script>
   <script src="{{ url_for('static', filename='script/task.js') }}"></script>
 </body>
 </html>

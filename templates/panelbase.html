@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/panelbase.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/panel.css') }}">
+</head>
+<body>
+    <header>
+        <div class="head__container">
+            <div class="left"></div>
+            <div class="center">
+                {% if current_user.status == 1 %}
+                    <a href="/panel/classes">Классы</a>
+                    <a href="/panel/tests">Тесты</a>
+                {% endif %}
+            </div>
+            <div class="user">
+                <div class="name">{{ current_user.name }} {{ current_user.surname }}</div>
+                <a href="/logout">Выйти</a>
+            </div>
+        </div>
+    </header>
+    <div class="container mt-2">
+        <div class="content">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </div>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap" rel="stylesheet">
+</body>
+</html>

@@ -18,6 +18,7 @@ class Class(SqlAlchemyBase):
 
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
+    invitation_link = sqlalchemy.Column(sqlalchemy.String)
     # teacher
     user = orm.relation('User')
     #
@@ -27,8 +28,23 @@ class Class(SqlAlchemyBase):
                               secondary="user_to_class",
                               backref="classes")
 
+    # klassi u kotorih etot test
+    tests = orm.relation("Test",
+                           secondary="class_to_test",
+                           backref="classes")
+
     def __repr__(self):
         return f"<Class> {self.title}, {self.created_date}, {self.user}"
+
+
+class_to_test = sqlalchemy.Table(
+    'class_to_test',
+    SqlAlchemyBase.metadata,
+    sqlalchemy.Column('test', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('tests.id')),
+    sqlalchemy.Column('classid', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('classes.id'))
+)
 
 
 user_to_class = sqlalchemy.Table(
@@ -36,6 +52,6 @@ user_to_class = sqlalchemy.Table(
     SqlAlchemyBase.metadata,
     sqlalchemy.Column('user', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('users.id')),
-    sqlalchemy.Column('class', sqlalchemy.Integer,
+    sqlalchemy.Column('classid', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('classes.id'))
 )

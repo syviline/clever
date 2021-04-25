@@ -1,0 +1,16 @@
+{% extends "panelbase.html" %}
+
+{% block content %}
+<div class="content__head">
+    <h1>Тесты</h1>
+    <button><a href="/panel/tests/new">Создать новый тест</a></button>
+</div>
+{% for test in tests %}
+<div class="class" style="display: flex; justify-content: space-between; border-bottom: 1px solid black">
+    <a href="/panel/test/{{ test.id }}">{{ test.title }}</a>
+    {% if not test.is_completable %}
+    <span style="color: red">Тест не доделан до конца</span>
+    {% endif %}
+</div>
+{% endfor %}
+{% endblock %}

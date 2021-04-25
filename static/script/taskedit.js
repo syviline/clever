@@ -8,6 +8,24 @@ String.prototype.format = function () { // форматирует строку. 
     });
 };
 
+function save(redirect) {
+    let xhr = new XMLHttpRequest()
+    xhr.open('POST', 'http://127.0.0.1:5000/taskedit/save')
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify({
+        testid: testid,
+        task: task,
+        answers: correctAnswersIds,
+        scores: scores
+    }))
+    if (redirect) {
+        xhr.onload = () => location = '/panel/tests'
+    }
+    console.log('Saved!')
+}
+
+setInterval(save, 5000)
+
 function numToId(num) { // превращает число в буквенный id
     let res = ''
     let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
@@ -60,7 +78,7 @@ let taskTemplates = { // шаблоны для заданий
     textWithGaps: "<h1 class=\"task__label\">Вставьте пропуски</h1><div class=\"task__text editable\" contenteditable='true' oninput='textWithGapsInput()'></div>",
     multipleAnswer: "<div class=\"question\"><div class=\"question__content\" id=\"question\"><div class=\"editable\" contenteditable=\"true\" oninput='editQuestion()'>{0}</div></div></div><h3 style=\"font-weight: 500; margin-top: 20px; margin-left: 20px;\">Выберите несколько ответов</h3><div class=\"answers__container\">{1}</div>",
     oneAnswer: "<div class=\"question\"><div class=\"question__content\" id=\"question\"><div class='editable' contenteditable='true' oninput='editQuestion()'>{0}</div></div></div><h3 style=\"font-weight: 500; margin-top: 20px; margin-left: 20px;\">Выберите один из ответов</h3><div class=\"answers__container\">{1}</div>",
-    chooseTemplate: "<h2 class=\"textcenter\">Выберите шаблон для задания</h2><div class=\"variants\"><button onclick='chooseTemplate(1)'>Вопрос и выбор из нескольких ответов</button><button onclick='chooseTemplate(2)'>Текстовое поле с пропусками</button><button onclick='chooseTemplate(3)'>Вопрос и выбор из одного ответа</button></div>"
+    chooseTemplate: "<h2 class=\"textcenter\">Выберите шаблон для задания</h2><div class=\"variants\"><button onclick='chooseTemplate(1)'>Вопрос и выбор из нескольких ответов</button><button onclick='chooseTemplate(2)' disabled>Текстовое поле с пропусками</button><button onclick='chooseTemplate(3)'>Вопрос и выбор из одного ответа</button></div>"
 
 }
 
@@ -158,6 +176,11 @@ function oneAnswerChoose(id, taskId) {
     renderTaskDOM()
 }
 
+function changeScore() {
+    let elem = document.querySelector('.score__value')
+    scores[task[currentTaskId].id] = elem.value
+}
+
 function multipleAnswerChoose(id, taskId) {
     e = window.event
     e.preventDefault()
@@ -183,16 +206,25 @@ function chooseTemplate(id) { // выбор шаблона при создани
         task[currentTaskId].taskType = 'multipleAnswer'
         task[currentTaskId].content = {question: "", answers: []}
         correctAnswersIds[uid] = []
+        scores[uid] = 1
     } else if (id == 2) {
         task[currentTaskId].taskType = 'textWithGaps'
         task[currentTaskId].content = ''
         correctAnswersIds[uid] = {}
+        scores[uid] = 1
     } else if (id == 3) {
         task[currentTaskId].taskType = 'oneAnswer'
         task[currentTaskId].content = {question: "", answers: []}
         correctAnswersIds[uid] = null
+        scores[uid] = 1
     }
+    updateScoreInHeader()
     renderTaskDOM()
+}
+
+function updateScoreInHeader() {
+    let elem = document.querySelector('.score__value')
+    elem.value = scores[task[currentTaskId].id]
 }
 
 function addAnswer() { // добавление ответа в задание
@@ -201,6 +233,7 @@ function addAnswer() { // добавление ответа в задание
 }
 
 let currentTaskId = 0 // id текущей задачи в массиве task
+updateScoreInHeader()
 let forwardButton = document.querySelector(".forward") // кнопочки
 let backButton = document.querySelector(".back")
 let forwardIcon = forwardButton.querySelector('.material-icons-round')
@@ -215,6 +248,23 @@ if (currentTaskId + 1 == task.length) { // если текущее задани�
     forwardIcon.innerText = 'add'
 }
 
+function deleteTask() {
+    if ('id' in task[currentTaskId]) {
+        delete correctAnswersIds[task[currentTaskId].id]
+        delete scores[task[currentTaskId].id]
+    }
+    task.splice(currentTaskId, 1);
+    currentTaskId = 0;
+    renderTaskDOM();
+    info.innerText = `${currentTaskId + 1} из ${task.length}`
+    backButton.classList.add('inactive')
+    if (currentTaskId + 1 == task.length) { // если текущее задание последнее, то на кнопке вперед будет знак плюса
+        forwardIcon.innerText = 'add'
+    } else {
+        forwardIcon.innerText = 'arrow_forward'
+    }
+}
+
 forwardButton.addEventListener('click', e => { // при нажатии на кнопку вперед
     e.preventDefault()
     if (currentTaskId + 1 == task.length) { // если текущее задание последнее, то создаем новое
@@ -226,6 +276,7 @@ forwardButton.addEventListener('click', e => { // при нажатии на к�
         forwardIcon.innerText = 'add'
     }
     backButton.classList.remove('inactive') // делаем кнопку назад активной(если она была неактивной)
+    updateScoreInHeader()
     renderTaskDOM() // "рендерим" контент задачи
 })
 
@@ -240,5 +291,6 @@ backButton.addEventListener('click', e => { // кнопка назад
     }
     forwardIcon.innerText = 'arrow_forward'
     info.innerText = `${currentTaskId + 1} из ${task.length}`
+    updateScoreInHeader()
     renderTaskDOM()
 })

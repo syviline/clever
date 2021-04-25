@@ -1,0 +1,10 @@
+{% extends "panelbase.html" %}
+
+{% block content %}
+<h1>Новый тест</h1>
+<form action="/panel/tests/new" class="mt-2" method="POST">
+    {{ form.name.label() }}<br>
+    {{ form.name }}<br><br>
+    {{ form.submit }}
+</form>
+{% endblock %}

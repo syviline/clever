@@ -10,11 +10,12 @@ class UserAnswer(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     answer = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
     completed = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
     score = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
-    scores = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
+    maxscore = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
+    class_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                sqlalchemy.ForeignKey("classes.id"))
 
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
@@ -23,6 +24,8 @@ class UserAnswer(SqlAlchemyBase):
     test_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("tests.id"))
     test = orm.relation('Test')
+
+    classes = orm.relation('Class')
 
     def __repr__(self):
         return f"<UserAnswer> {self.title}, {self.test}, {self.user}"

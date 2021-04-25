@@ -93,6 +93,10 @@ body {
     color: #22d3ee;
 }
 
+.error {
+    color: #EF4444;
+}
+
 @media(max-width: 1200px) {
     .skew {
         width: 100%;
