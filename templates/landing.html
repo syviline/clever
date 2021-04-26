@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style/landing.css') }}">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="left__block">
+        <div class="logo">Project Vega</div>
+        <div class="header__left__links">
+          <a href="#">Test</a>
+          <a href="#">Test2</a>
+          <a href="#">Test3</a>
+        </div>
+      </div>
+      <div class="right__block">
+        <a href="auth" class="login_btn">Войти</a>
+        <a href="register" class="register_btn">Зарегистрироваться</a>
+      </div>
+    </div>
+  </header>
+  <div class="content">
+    <div class="container">
+      <div class="info__block">
+        <div class="info__big">Выполняйте задания от учителей.</div>
+        <div class="info__small">{name} предоставляет удобный инструмент для выполнения и создания школьных заданий.</div>
+      </div>
+      <div class="register__block">
+          <div class="form">
+            <div class="label">Регистрация</div>
+            <div class="login__element">
+              <span class="input__label">Логин:</span>
+              <input type="text">
+            </div>
+            <div class="login__element">
+              <span class="input__label">Почта:</span>
+              <input type="text">
+            </div>
+            <div class="login__element">
+              <span class="input__label">Пароль:</span>
+              <input type="text">
+            </div>
+            <div class="login__element">
+              <span class="input__label">Подтвердите пароль:</span>
+              <input type="text">
+            </div>
+          </div>
+          <button class="register_btn">Зарегистрироваться</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

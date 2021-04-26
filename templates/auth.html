@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/auth.css') }}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+<body>
+    <div class="skew">
+        <div class="content">
+            <div class="form__label">Авторизация</div>
+            <form action="auth" method="POST" novalidate>
+                <div>{{ form.csrf_token }}</div>
+                <div class="label">{{ form.email.label() }}</div>
+                {{ form.email() }}
+                {% for error in form.email.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+                <div class="label">{{ form.password.label() }}</div>
+                {{ form.password() }}
+                {% for error in form.password.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+                <div class="error">{{ message }}</div>
+                {{ form.submit(class='submit') }}
+            </form>
+            <div class="registerlink__label">Вы тут впервые? <a href="/register" class="register__link">Зарегистрируйтесь</a></div>
+        </div>
+    </div>
+</body>
+</html>

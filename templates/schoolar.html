@@ -1,0 +1,15 @@
+{% extends "panelbase.html" %}
+
+{% block content %}
+<div class="content__head">
+    <h1>Классы</h1>
+</div>
+{% for class in classes %}
+<div class="class">
+    <h3>{{ class.title }}</h3>
+    {% for i in class.tests %}
+    <a href="/test/{{ class.id }}/{{ i.id }}">{{ i.title }}</a><br>
+    {% endfor %}
+</div>
+{% endfor %}
+{% endblock %}

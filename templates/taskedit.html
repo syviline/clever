@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/task.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/taskedit.css') }}">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="task__name">Задание 1</div>
+        <div class="task__score">Количество баллов: <input type="number" min="1" value="1" class="score__value" oninput="changeScore()"></div>
+        <div class="empty"></div>
+        <div class="buttons">
+            <button class="delete__task" onclick="deleteTask()"><span class="material-icons-round">delete</span><span class="button__text">Удалить страницу</span></button>
+            <button class="save" onclick="save(true)"><span class="material-icons-round">save</span><span class="button__text">Сохранить</span></button>
+        </div>
+    </div>
+</header>
+<div class="content">
+    <div class="container">
+    </div>
+</div>
+<footer>
+    <div class="footer__left"></div>
+    <div class="footer__container">
+        <button class="back inactive">
+            <span class="material-icons-round">arrow_back</span>
+        </button>
+        <div class="info"></div>
+        <button class="forward">
+            <span class="material-icons-round">arrow_forward</span>
+        </button>
+    </div>
+    <div class="footer__right">
+      <span class="material-icons-round icon">
+        timer
+      </span>
+        <span class="timer__time">
+        00:30
+        </span>
+    </div>
+    <script>let task = {{ task|tojson }}
+    let correctAnswersIds = {{ correctAnswersIds|tojson }}
+    let scores = {{ scores|tojson }}
+    let testid = {{ testid }}
+    </script>
+    <script src="{{ url_for('static', filename='script/taskedit.js') }}"></script>
+</footer>
+</body>
+</html>

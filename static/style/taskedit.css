@@ -1,0 +1,169 @@
+header {
+    min-height: 100px;
+    background-color: #fafaf9;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.answer {
+    transition: 0.3s;
+}
+
+.variants {
+    display: flex;
+    justify-content: space-around;
+}
+
+.variants button {
+    padding: 30px;
+    font-size: 18px;
+    flex-basis: 25%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.1s;
+    border-radius: 10px;
+}
+
+.variants button:hover {
+    background-color: #cbd5e1;
+    transition: 0.1s;
+}
+
+.variants {
+    margin-top: 40px;
+}
+
+.editable {
+    border: 2px solid #1E293B;
+    border-radius: 10px;
+    line-height: 50px;
+    vertical-align: center;
+    min-width: 60px;
+    min-height: 50px;
+    outline: none;
+    padding: 0 20px;
+}
+
+button.answer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+button.answer .editable {
+    flex-basis: 60%;
+}
+
+button .editable {
+    max-width: 80%;
+}
+
+.answer .delete__button {
+    flex-basis: 20%;
+    transition: 0.1s;
+}
+
+.answer .delete__button .material-icons-round {
+    font-size: 30px;
+}
+
+.answer .empty {
+    flex-basis: 20%;
+}
+
+.answer .delete__button:hover {
+    color: #f43f5e;
+    transition: 0.1s;
+}
+
+.answer-add {
+    background-color: #e0f2fe;
+    border-color: #50c7fc;
+    color: #354867;
+}
+
+.answer-add .material-icons-round {
+    font-size: 50px;
+    padding-bottom: 0;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+}
+
+.task__score {
+    font-size: 18px;
+}
+
+.task__score input {
+    width: 40px;
+    padding: 5px;
+    font-size: 18px;
+    outline: none;
+    border: 1px solid #4ade80;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.empty {
+    flex-basis: 20%;
+}
+
+.task__name {
+    font-size: 28px;
+}
+
+.buttons button .material-icons-round {
+    margin-right: 5px;
+}
+
+.buttons button {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    padding: 20px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttons {
+    display: flex;
+}
+
+header {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.delete__task {
+    background-color: #f43f5e;
+    transition: 0.1s;
+}
+
+.delete__task:hover {
+    background-color: #cf3650;
+    transition: 0.1s;
+}
+
+.save {
+    background-color: #4ade80;
+    transition: 0.1s;
+}
+
+.save:hover {
+    background-color: #42c371;
+    transition: 0.1s;
+}
+
+.task__score {
+    margin-left: 40px;
+}

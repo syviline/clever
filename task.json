@@ -1,0 +1,55 @@
+[
+  {
+    "id": 1,
+    "taskType": "multipleAnswer",
+    "checkType": "auto",
+    "content": {
+      "question": "Города России",
+      "answers": ["Москва", "Лондон", "Тюмень"]
+    }
+  },
+  {
+    "id": 2,
+    "taskType": "textWithGaps",
+    "checkType": "auto",
+    "content": [
+      "Lorem ipsum", {
+        "id": 3
+      }, "sit", {
+        "id": 4, "content": ["amet", "fish", "chicken"]
+      }, "\n"
+    ]
+  },
+  {
+    "id": 5,
+    "taskType": "textInput",
+    "checkType": "manual",
+    "content": {
+      "question": "Напишите сочинение"
+    }
+  },
+  {
+    "id": 6,
+    "taskType": "oneAnswer",
+    "checkType": "auto",
+    "content": {
+      "question": "Назовите столицу Великобритании",
+      "answers": ["Москва", "Токио", "Лондон"]
+    }
+  }
+]
+
+/*
+
+ручная проверка - HC
+автопроверка - AC
+
+Вопрос и выбор из нескольких ответов - multipleAnswer  # AC # вторым
+Вопрос и один правильный ответ из всех - oneAnswer  # AC # делаю первым
+Большое текстовое поле и вопрос к нему - textInput  # HC # четвертым если вообще делаю
+Текст в который вставить пропуски - textWithGaps  # AC # третьим
+
+
+Lorem ipsum {dolor} sit {amet; london; paris}
+
+*/

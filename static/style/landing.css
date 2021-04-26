@@ -1,0 +1,218 @@
+* {
+  font-family: 'Inter', sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #475569;
+}
+
+a:hover {
+  color: #1E293B;
+}
+
+.container {
+  height: inherit;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+header {
+  position: fixed;
+  background-color: white;
+  height: 80px;
+  width: 100%;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
+}
+
+header .logo {
+  color: #1D4ED8;
+  font-weight: 500;
+  font-size: 28px;
+  vertical-align: middle;
+  line-height: 80px;
+}
+
+header .container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left__block {
+  display: flex;
+  align-items: center;
+}
+
+.header__left__links {
+  margin-left: 50px;
+}
+
+.header__left__links a {
+  margin: 10px;
+  font-size: 20px;
+}
+
+.right__block {
+  display: flex;
+  align-items: center;
+}
+
+.right__block a {
+  padding: 10px 25px;
+  border: 2px solid #0EA5E9;
+  border-radius: 15px;
+  margin: 10px;
+}
+
+header .login_btn {
+  transition: 0.2s;
+}
+
+header .register_btn {
+  background-color: #0EA5E9;
+  color: white;
+  transition: 0.2s;
+}
+
+header .login_btn:hover {
+  background-color: #34D399;
+  border: 2px solid #34D399;
+  color: white;
+  transition: 0.2s;
+}
+
+header .register_btn:hover {
+  background-color: #34D399;
+  border: 2px solid #34D399;
+  transition: 0.2s;
+}
+
+.content {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(330deg, #4ade80 10%, #a3e635 90%);
+  color: #1E293B;
+}
+
+.content .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info__block {
+  width: 60%;
+}
+
+.info__big {
+  font-weight: 800;
+  font-size: 70px;
+  min-width: 400px;
+}
+
+.info__small {
+  margin-top: 40px;
+  font-weight: 500;
+  font-size: 30px;
+  color: #334155;
+}
+
+.register__block .label {
+  font-weight: 800;
+  font-size: 30px;
+  padding: 10px;
+}
+
+.register__block {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  min-width: 400px;
+  margin-left: 15px;
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: 20px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.register__block .login__element {
+  margin: 30px 0;
+}
+
+.register__block .login__element .input__label {
+  margin-left: 10px;
+}
+
+.register__block input {
+  display: block;
+  width: 90%;
+  padding: 15px;
+  border-radius: 20px;
+  border: 2px solid #D4D4D8;
+  outline: none;
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.register__block .register_btn {
+  margin: 0 auto; /* без этой штуки кнопка растягивается на всю форму. почему - в душе не чаю */
+  padding: 15px 35px;
+  border: 2px solid #0EA5E9;
+  background-color: white;
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
+}
+
+@media(max-width:1000px) {
+  .register__block {
+    display: none;
+  }
+
+  .content .container {
+    justify-content: center;
+  }
+
+  .info__block {
+    width: 100%;
+  }
+}
+
+@media(max-width:880px) {
+  .left__block .logo {
+    display: none;
+  }
+}
+
+@media(max-width:770px) {
+  header .right__block {
+    display: none;
+  }
+
+  header .left__block .header__left__links {
+    margin-left: 0;
+  }
+
+  header .container {
+    justify-content: center;
+  }
+
+  .content {
+    text-align: center;
+  }
+}
+
+@media(max-width:550px) {
+  .content .info__big {
+    font-size: 35px;
+    min-width: 0;
+  }
+
+  .content .info__small {
+    font-size: 20px;
+  }
+}

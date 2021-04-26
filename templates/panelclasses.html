@@ -1,0 +1,13 @@
+{% extends "panelbase.html" %}
+
+{% block content %}
+<div class="content__head">
+    <h1>Классы</h1>
+    <button><a href="/panel/classes/new">Создать новый</a></button>
+</div>
+{% for class in classes %}
+<div class="class">
+    <a href="/panel/class/{{ class.id }}">{{ class.title }}</a>
+</div>
+{% endfor %}
+{% endblock %}
