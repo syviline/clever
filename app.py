@@ -290,12 +290,17 @@ def save_test_answers():  # cохранение ответов на тест
     for i in scores.values():
         maxscore += int(i)  # максимальное значение очков
     for i in correct.keys():
-        if type(i) == list:  # обработка нескольких ответов
+        print(correct[i])
+        if type(correct[i]) == list:  # обработка нескольких ответов
             if i in ans:  # проверяем есть ли вообще ответ на это задание у ученика
                 if sorted(ans[i]) == sorted(correct[i]):
                     score += int(scores[i])
-        elif type(i) == str:  # обработка одного ответа
+        elif type(correct[i]) == str or type(correct[i]) == int:  # обработка одного ответа
             if i in ans:  # проверяем есть ли вообще ответ на это задание у ученика
+                print("===========")
+                print(ans[i])
+                print(correct[i])
+                print("===========")
                 if ans[i] == correct[i]:
                     score += int(scores[i])
     query = db_sess.query(UserAnswer).filter(UserAnswer.user_id == current_user.id).filter(
@@ -329,7 +334,7 @@ def test(classid, id):  # cтраница с выполнением теста
     test = db_sess.query(Test).filter(Test.id == id).first()
     user = db_sess.query(User).filter(User.id == current_user.id).first()
     usertest = db_sess.query(UserAnswer).filter(UserAnswer.user_id == current_user.id).filter(UserAnswer.class_id == classid).filter(UserAnswer.test_id == test.id).first()
-    useranswers = "{}"
+    useranswers = {}
     if usertest:
         if usertest.completed == 1:
             return 'Вы уже проходили этот тест!'

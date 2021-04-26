@@ -16,7 +16,7 @@
 <body>
 <header>
     <div class="container">
-        <div class="task__name">Задание 1</div>
+        <div class="task__name">Задание</div>
         <div class="task__score">Количество баллов: <input type="number" min="1" value="1" class="score__value" oninput="changeScore()"></div>
         <div class="empty"></div>
         <div class="buttons">
@@ -41,12 +41,12 @@
         </button>
     </div>
     <div class="footer__right">
-      <span class="material-icons-round icon">
-        timer
-      </span>
-        <span class="timer__time">
-        00:30
-        </span>
+<!--      <span class="material-icons-round icon">-->
+<!--        timer-->
+<!--      </span>-->
+<!--        <span class="timer__time">-->
+<!--        00:30-->
+<!--        </span>-->
     </div>
     <script>let task = {{ task|tojson }}
     let correctAnswersIds = {{ correctAnswersIds|tojson }}

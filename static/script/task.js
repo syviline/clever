@@ -162,7 +162,8 @@ function saveResult(id, parentId=null) {
 //     }
 // ]
 
-if (!answers) {
+if (!answers || Object.keys(answers).length == 0 || answers === 'none') {
+    console.log(1)
     task.forEach(item => { // making an answers object
         if (item.taskType == "textWithGaps") {
             answers[item.id] = {}

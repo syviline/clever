@@ -263,6 +263,7 @@ function deleteTask() {
     } else {
         forwardIcon.innerText = 'arrow_forward'
     }
+    updateScoreInHeader()
 }
 
 forwardButton.addEventListener('click', e => { // при нажатии на кнопку вперед
