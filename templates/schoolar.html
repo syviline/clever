@@ -7,6 +7,10 @@
 {% for class in classes %}
 <div class="class">
     <h3>{{ class.title }}</h3>
+    <h5>Тесты:</h5>
+    {% if not class.tests %}
+        <h6 style="color: #64748b;">Пока ничего не задано</h6>
+    {% endif %}
     {% for i in class.tests %}
     <a href="/test/{{ class.id }}/{{ i.id }}">{{ i.title }}</a><br>
     {% endfor %}

@@ -3,11 +3,23 @@
 {% block content %}
 <div class="content__head">
     <h1>Классы</h1>
-    <button><a href="/panel/classes/new">Создать новый</a></button>
+    <a href="/panel/classes/new"><span class="material-icons-round" style="color: #86efac">add</span>Создать</a>
 </div>
+{% if error %}
+    <div class="error" style="color: #EF4444; font-size: 24px; font-weight: 500">{{ error }}</div>
+{% endif %}
 {% for class in classes %}
-<div class="class">
+<div class="class" style="display: flex; justify-content: space-between">
     <a href="/panel/class/{{ class.id }}">{{ class.title }}</a>
+    <a onclick="deleteclass({{ class.id }}, '{{ class.title }}', )" style="cursor: pointer;"><span class="material-icons-round" style="color: #ef4444; display: flex; align-items: center">delete</span></a>
 </div>
 {% endfor %}
+    <script>
+        function deleteclass(id, title) {
+            a = confirm("Вы уверены что хотите удалить класс " + title + "? Учтите, что это можно сделать только если вы удалите всех учеников из класса.")
+            if (a) {
+                location = '/deleteclass/' + id
+            }
+        }
+    </script>
 {% endblock %}

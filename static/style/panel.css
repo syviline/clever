@@ -3,14 +3,13 @@
     justify-content: space-between;
 }
 
-.content__head button {
-    padding: 0 20px;
+.content__head a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
     background-color: #0ea5e9;
     border: none;
-    border-radius: 5px;
-}
-
-.content__head a {
+    border-radius: 10px;
     color: #FFF;
 }
 
@@ -28,6 +27,29 @@ form #submit:hover {
 
 .class {
     font-size: 24px;
-    padding: 10px 0;
-    border-bottom: 1px solid black;
+    padding: 30px 30px;
+    margin: 30px 10px;
+    background-color: #f1f5f9;
+    border-radius: 15px;
+}
+
+.class a {
+    color: #1D4ED8;
+}
+
+.class a:hover {
+    color: #1E40AF;
+}
+
+.class.schoolar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 10px;
+    padding: 20px 30px;
+}
+
+.class.schoolar a {
+    display: flex;
+    justify-content: center;
 }

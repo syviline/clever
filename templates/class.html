@@ -4,14 +4,18 @@
 <div class="content__head">
     <h1>{{ title }}</h1>
 </div>
-<div>
-    <span>Ссылка для приглашения в класс:</span>
-    <input type="text" readonly value="127.0.0.1:5000/invitation/{{ invitation_link }}" onclick="this.select();">
+<div style="margin: 5px 0; font-size: 18px;">
+    <span style="margin: 5px 0;">Ссылка для приглашения в класс:</span>
+    <input type="text" readonly value="127.0.0.1:5000/invitation/{{ invitation_link }}" onclick="this.select();" style="padding: 2px; outline: none;">
 </div>
-<h2>Ученики:</h2>
+<h1>Ученики:</h1>
+    {% if not schoolars %}
+        <div style="color: #64748b; font-size: 20px;">Пока нет учеников...</div>
+    {% endif %}
 {% for i in schoolars %}
-<div class="class">
+<div class="class schoolar">
     <a href="{{ classid }}/schoolar/{{ i.id }}">{{ i.name }} {{ i.surname }}</a>
+    <a onclick="deleteuser({{ i.id }}, '{{ i.name }} {{ i.surname }}', )" style="cursor: pointer;"><span class="material-icons-round" style="color: #ef4444">delete</span></a>
 </div>
 {% endfor %}
 {% if tests%}
@@ -29,4 +33,12 @@
     <a href="/closetest/{{ i.id }}/{{ classid }}" style="color: red;">Удалить тест</a>
 </div>
 {% endfor %}
+    <script>
+        function deleteuser(id, name) {
+            a = confirm('Вы действительно хотите удалить ученика ' + name + ' из класса?')
+            if (a) {
+                location = '/deleteuserfromclass/{{ classid }}/' + id
+            }
+        }
+    </script>
 {% endblock %}

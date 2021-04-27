@@ -249,6 +249,9 @@ if (currentTaskId + 1 == task.length) { // если текущее задани�
 }
 
 function deleteTask() {
+    if (task.length == 1) {
+        return
+    }
     if ('id' in task[currentTaskId]) {
         delete correctAnswersIds[task[currentTaskId].id]
         delete scores[task[currentTaskId].id]

@@ -87,11 +87,12 @@ def panel():
 @app.route('/panel/classes')
 @login_required
 def panel_classes():
+    error = request.args.get('error')
     if current_user.status != 1:  # этот код сейчас будет везде, отправляет ученика, который забрел не туда, на страницу ученика.
         return redirect("/schoolar")
     db_sess = db.db_session.create_session()
     classes = db_sess.query(Class).filter(Class.user_id == current_user.id)  # список классов учителя
-    return render_template('panelclasses.html', title='Классы', classes=classes)
+    return render_template('panelclasses.html', title='Классы', classes=classes, error=error)
 
 
 @app.route('/panel/classes/new', methods=['GET', 'POST'])
@@ -333,7 +334,8 @@ def test(classid, id):  # cтраница с выполнением теста
     db_sess = db.db_session.create_session()
     test = db_sess.query(Test).filter(Test.id == id).first()
     user = db_sess.query(User).filter(User.id == current_user.id).first()
-    usertest = db_sess.query(UserAnswer).filter(UserAnswer.user_id == current_user.id).filter(UserAnswer.class_id == classid).filter(UserAnswer.test_id == test.id).first()
+    usertest = db_sess.query(UserAnswer).filter(UserAnswer.user_id == current_user.id).filter(
+        UserAnswer.class_id == classid).filter(UserAnswer.test_id == test.id).first()
     useranswers = {}
     if usertest:
         if usertest.completed == 1:
@@ -371,6 +373,49 @@ def check_schoolar_answers(classid, userid):  # показываем ответ�
     tests = db_sess.query(UserAnswer).filter(UserAnswer.user_id == userid).filter(UserAnswer.class_id == classid).all()[
             ::-1]  # разворачиваем массив чтобы сверху показывались самые последние прохождения
     return render_template('answerspage.html', tests=tests, user=user, class_=class_)
+
+
+@app.route('/deleteuserfromclass/<int:classid>/<int:userid>')
+def deleteuserfromclass(classid, userid):  # удаление ученика из класса
+    if current_user.status != 1:
+        return redirect("/schoolar")
+    db_sess = db.db_session.create_session()
+    class_ = db_sess.query(Class).filter(Class.id == classid).first()
+    user = db_sess.query(User).filter(User.id == userid).first()
+    if class_.user_id == current_user.id:  # проверяем что класс принадлежит залогиненному юзеру
+        if user in class_.users:  # проверям что ученик действительно есть в классе
+            class_.users.remove(user)
+            db_sess.commit()
+    return redirect('/panel/class/' + str(classid))
+
+
+@app.route('/deletetask/<int:id>')
+def deletetask(id):
+    if current_user.status != 1:
+        return redirect("/schoolar")
+    db_sess = db.db_session.create_session()
+    test = db_sess.query(Test).filter(Test.id == id).first()
+    if test.user_id == current_user.id:
+        db_sess.delete(test)
+        db_sess.commit()
+    return redirect('/panel/tests')
+
+
+@app.route('/deleteclass/<int:id>')
+def deleteclass(id):  # удаление класса
+    db_sess = db.db_session.create_session()
+    class_ = db_sess.query(Class).filter(Class.id == id).first()
+    if class_.user_id == current_user.id:
+        if len(class_.users) != 0:  # В классе не должно быть учеников при удалении.
+            # Так как удаление класса это событие масштабное, чтобы полностью предотвратить возможность
+            # случайного нажатия(учитель может случайно подумать что удаляет ученика из класса,
+            # а на самом деле удаляет сам класс), сервер будет удалять класс только при условии,
+            # что в нем нет учеников.
+            return redirect(
+                '/panel/classes?error=Нельзя удалить класс, пока в нем есть ученики. Удалите всех учеников из класса, а после удалите сам класс.')
+        db_sess.delete(class_)
+        db_sess.commit()
+    return redirect('/panel/classes')
 
 
 if __name__ == "__main__":
