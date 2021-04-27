@@ -23,6 +23,7 @@ class Test(SqlAlchemyBase):
     answers = sqlalchemy.Column(sqlalchemy.Text)  # ответы на тест в формате json
     scores = sqlalchemy.Column(sqlalchemy.Text)  # значения баллов за каждое задание, json
     is_completable = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
+    can_see_results = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
     # sozdatetel
     user = orm.relation('User')

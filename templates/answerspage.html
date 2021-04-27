@@ -1,6 +1,7 @@
 {% extends "panelbase.html" %}
 {% block content %}
-<div class="content__head">
+<a href="/panel/class/{{ class_.id }}" style="display: flex; align-items: center; padding: 15px 15px; background-color: #1D4ED8; color: #FFF; border-radius: 20px;"><span class="material-icons-round">arrow_back</span>Назад</a>
+<div class="content__head" style="margin-top: 20px;">
     <h1>Ответы для ученика {{ user.name }} {{ user.surname }} в классе {{ class_.name }}</h1>
 </div>
 {% if not tests %}
@@ -9,7 +10,7 @@
 {% for i in tests %}
 <div class="class" style="display: flex; justify-content: space-between;">
     <h3>{{ i.test.title }}</h3>
-    <span>{{ i.score }} / {{ i.maxscore }} (
+    <span>{{ i.score|int }} / {{ i.maxscore }} (
     {% if i.completed %}
         <span style="color: green">ученик завершил тест</span>
     {% else %}

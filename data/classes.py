@@ -37,7 +37,7 @@ class Class(SqlAlchemyBase):
         return f"<Class> {self.title}, {self.created_date}, {self.user}"
 
 
-class_to_test = sqlalchemy.Table(
+class_to_test = sqlalchemy.Table(  # отношение класса к тесту
     'class_to_test',
     SqlAlchemyBase.metadata,
     sqlalchemy.Column('test', sqlalchemy.Integer,
@@ -47,7 +47,7 @@ class_to_test = sqlalchemy.Table(
 )
 
 
-user_to_class = sqlalchemy.Table(
+user_to_class = sqlalchemy.Table(  # отношение пользователей к классу
     'user_to_class',
     SqlAlchemyBase.metadata,
     sqlalchemy.Column('user', sqlalchemy.Integer,

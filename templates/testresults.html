@@ -1,0 +1,10 @@
+{% extends "panelbase.html" %}
+
+{% block content %}
+    <a href="/schoolar" style="display: flex; align-items: center; padding: 15px 15px; background-color: #1D4ED8; color: #FFF; border-radius: 20px;"><span class="material-icons-round">arrow_back</span>Назад</a>
+    {% if usertest.test.can_see_results %}
+        <div style="font-size: 22px; margin-top: 10px;">Вы прошли этот тест на {{ usertest.score|int }} из {{ usertest.maxscore }} баллов.</div>
+    {% else %}
+        <div style="color: #EF4444; font-size: 22px; font-weight: 500; margin-top: 10px;">Вы не можете просматривать результаты этого теста.</div>
+    {% endif %}
+{% endblock %}

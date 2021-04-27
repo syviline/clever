@@ -28,4 +28,4 @@ class UserAnswer(SqlAlchemyBase):
     classes = orm.relation('Class')
 
     def __repr__(self):
-        return f"<UserAnswer> {self.title}, {self.test}, {self.user}"
+        return f"<UserAnswer> {self.test}, {self.user}"

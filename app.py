@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, request
 from forms.loginform import LoginForm
 from forms.registerform import RegisterForm
 from forms.classcreate import ClassCreate
+from forms.testcreate import TestCreate
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 import db
 import uuid
@@ -16,13 +17,42 @@ db.db_session.global_init("db/clever.db")
 app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
-app.config['SECRET_KEY'] = 'qwekwqkJDHASIqwop'
+app.config['SECRET_KEY'] = 'dmsfmfekwjkqLWqwJEJQWdjaSKdnwKQWdasjDkwQLDsmmqwkd'
+
+
+def generateUUID():
+    # Генерирует уникальный UUID
+    # Используется для ссылок приглашения в класс
+    res = uuid.uuid4().hex
+    return res
+
+
+def error_template(error):
+    # if current_user.is_authenticated:
+    return render_template('error.html', error=error)
+    # else:
+    #     return render_template('unautherror.html', error=error)
 
 
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db.db_session.create_session()
     return db_sess.query(User).get(user_id)
+
+
+@app.errorhandler(500)
+def error500(error):
+    return error_template('Неизвестная ошибка на сервере: ' + error)
+
+
+@app.errorhandler(404)
+def error404(error):
+    return error_template('Страница не найдена.')
+
+
+@app.errorhandler(401)
+def error401():
+    return error_template('Вы не авторизованыю')
 
 
 @app.route('/')
@@ -97,7 +127,7 @@ def panel_classes():
 
 @app.route('/panel/classes/new', methods=['GET', 'POST'])
 @login_required
-def new_class():
+def new_class():  # создание нового класса
     if current_user.status != 1:
         return redirect("/schoolar")
     form = ClassCreate()
@@ -106,7 +136,7 @@ def new_class():
         class_ = Class()
         class_.title = title
         class_.user_id = current_user.id
-        class_.invitation_link = uuid.uuid4().hex
+        class_.invitation_link = generateUUID()
         db_sess = db.db_session.create_session()
         db_sess.add(class_)
         db_sess.commit()
@@ -130,7 +160,7 @@ def panel_tests():
 def new_test():
     if current_user.status != 1:
         return redirect("/schoolar")
-    form = ClassCreate()  # использую форму для создания класса, зачем создавать новую форму если они будут одинаковые
+    form = TestCreate()  # использую форму для создания класса, зачем создавать новую форму если они будут одинаковые
     if request.method == 'POST':
         title = form.name.data
         test = Test()
@@ -139,6 +169,7 @@ def new_test():
         test.user_id = current_user.id
         test.answers = '{}'
         test.scores = '{}'
+        test.can_see_results = form.canseeresults.data
         db_sess = db.db_session.create_session()
         db_sess.add(test)
         db_sess.commit()
@@ -183,6 +214,7 @@ def opentest(testid, classid):  # открывает тест для класс�
 
 
 @app.route('/closetest/<int:testid>/<int:classid>')
+@login_required
 def closetest(testid, classid):
     if current_user.status != 1:
         return redirect("/schoolar")
@@ -256,7 +288,8 @@ def save_task():  # сохранение теста(также происхож�
 
 @app.route('/schoolar')
 @login_required
-def schoolar():  # cтраница ученика
+def schoolar():
+    # cтраница ученика
     if current_user.status != 0:
         return redirect("/panel")
     db_sess = db.db_session.create_session()
@@ -267,7 +300,8 @@ def schoolar():  # cтраница ученика
 
 @app.route('/test/save', methods=['POST'])
 @login_required
-def save_test_answers():  # cохранение ответов на тест
+def save_test_answers():
+    # cохранение ответов на тест
     testjson = request.json
     print(testjson)
     if current_user.status != 0:
@@ -307,7 +341,8 @@ def save_test_answers():  # cохранение ответов на тест
     query = db_sess.query(UserAnswer).filter(UserAnswer.user_id == current_user.id).filter(
         UserAnswer.test_id == testjson[
             'testid']).first()  # делаем запрос и проверяем, есть ли ответ от этого ученика для этого теста в базе данных
-    if not query:  # если ответа еще нет в базе данных
+    if not query:
+        # если ответа еще нет в базе данных
         user_answer = UserAnswer()
         user_answer.answer = json.dumps(testjson['answers'])
         user_answer.completed = testjson['completed']
@@ -328,21 +363,27 @@ def save_test_answers():  # cохранение ответов на тест
 
 
 @app.route('/test/<int:classid>/<int:id>')  # classid чтобы знать, для какого именно класса мы проходим тест
-def test(classid, id):  # cтраница с выполнением теста
+@login_required
+def test(classid, id):
+    # cтраница с выполнением теста
     if current_user.status != 0:
         return redirect("/panel")
     db_sess = db.db_session.create_session()
+    class_ = db_sess.query(Class).filter(Class.id == classid).first()
     test = db_sess.query(Test).filter(Test.id == id).first()
     user = db_sess.query(User).filter(User.id == current_user.id).first()
     usertest = db_sess.query(UserAnswer).filter(UserAnswer.user_id == current_user.id).filter(
         UserAnswer.class_id == classid).filter(UserAnswer.test_id == test.id).first()
     useranswers = {}
+    if test not in class_.tests:
+        return redirect('/')
     if usertest:
         if usertest.completed == 1:
-            return 'Вы уже проходили этот тест!'
+            return render_template('testresults.html', usertest=usertest)
         useranswers = json.loads(usertest.answer)
     canaccess = False
-    for i in user.classes:  # проверяем, есть ли у ученика доступ к тесту
+    for i in user.classes:
+        # проверяем, есть ли у ученика доступ к тесту
         for j in i.tests:
             if test.id == j.id:
                 canaccess = True
@@ -353,22 +394,32 @@ def test(classid, id):  # cтраница с выполнением теста
 
 
 @app.route('/invitation/<link>')
-def accept_invitation(link):  # добавление ученика в класс по приглашению
+@login_required
+def accept_invitation(link):
+    # добавление ученика в класс по приглашению
     if current_user.status != 0:
         return redirect("/panel")
     db_sess = db.db_session.create_session()
+    user = db_sess.query(User).filter(User.id == current_user.id).first()
     class_ = db_sess.query(Class).filter(Class.invitation_link == link).first()
+    if not class_:
+        return error_template('Приглашение не найдено.')
+    if user in class_.users:
+        # если ученик уже в классе
+        print('user already in class')
+        return redirect("/schoolar")
     class_.users.append(db_sess.query(User).filter(User.id == current_user.id).first())
     db_sess.commit()
     return redirect("/schoolar")
 
 
 @app.route('/panel/class/<int:classid>/schoolar/<int:userid>')
+@login_required
 def check_schoolar_answers(classid, userid):  # показываем ответы ученика на все тесты в классе
     if current_user.status != 1:
         return redirect("/schoolar")
     db_sess = db.db_session.create_session()
-    class_ = db_sess.query(Class).filter(Class.user_id == classid).first()
+    class_ = db_sess.query(Class).filter(Class.id == classid).first()
     user = db_sess.query(User).filter(User.id == userid).first()
     tests = db_sess.query(UserAnswer).filter(UserAnswer.user_id == userid).filter(UserAnswer.class_id == classid).all()[
             ::-1]  # разворачиваем массив чтобы сверху показывались самые последние прохождения
@@ -376,6 +427,7 @@ def check_schoolar_answers(classid, userid):  # показываем ответ�
 
 
 @app.route('/deleteuserfromclass/<int:classid>/<int:userid>')
+@login_required
 def deleteuserfromclass(classid, userid):  # удаление ученика из класса
     if current_user.status != 1:
         return redirect("/schoolar")
@@ -390,11 +442,13 @@ def deleteuserfromclass(classid, userid):  # удаление ученика и�
 
 
 @app.route('/deletetask/<int:id>')
-def deletetask(id):
+@login_required
+def deletetask(id):  # удаление теста(id - id теста)
     if current_user.status != 1:
         return redirect("/schoolar")
     db_sess = db.db_session.create_session()
     test = db_sess.query(Test).filter(Test.id == id).first()
+    db_sess.query(UserAnswer).filter(UserAnswer.test_id == id).delete()  # удаление ответов учеников на этот тест
     if test.user_id == current_user.id:
         db_sess.delete(test)
         db_sess.commit()
@@ -402,7 +456,10 @@ def deletetask(id):
 
 
 @app.route('/deleteclass/<int:id>')
+@login_required
 def deleteclass(id):  # удаление класса
+    if current_user.status != 1:
+        return redirect("/schoolar")
     db_sess = db.db_session.create_session()
     class_ = db_sess.query(Class).filter(Class.id == id).first()
     if class_.user_id == current_user.id:
@@ -416,6 +473,23 @@ def deleteclass(id):  # удаление класса
         db_sess.delete(class_)
         db_sess.commit()
     return redirect('/panel/classes')
+
+
+@app.route('/regenlink/<int:classid>')
+@login_required
+def regenlink(classid):
+    # генерируем новую ссылку для приглашения в класс.
+    # Можно использовать в случае если старая утекла.
+    if current_user.status != 1:
+        return redirect("/schoolar")
+    db_sess = db.db_session.create_session()
+    class_ = db_sess.query(Class).filter(Class.id == classid).first()
+    if class_.user_id == current_user.id:
+        class_.invitation_link = generateUUID()
+        db_sess.commit()
+        return redirect('/panel/class/' + str(classid))
+    return redirect('/panel/classes')
+
 
 
 if __name__ == "__main__":
